@@ -19,39 +19,39 @@ class ChangeForm extends StatefulWidget {
 }
 
 class _ChangeFormState extends State<ChangeForm> {
-  List<Alarm> _alarmList = [Alarm('8:00','かける人',false), Alarm('９：００','かける人',false),];
+  List<Alarm> _alarmList = [
+    Alarm('8:00', 'かける人', false),
+    Alarm('９：００', 'かける人', false),
+  ];
 
   Widget build(BuildContext context) {
-
     return Scaffold(
-        appBar: AppBar(
-            title: Text('Startup Name Generator'),
-            actions: <Widget>[IconButton(
-              icon: Icon(Icons.add),
-              onPressed: () async {
-                final result = await Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => Detail()),
-                );
-                setState(() {
-                  if(result != null) _alarmList.add(result);
-                });
-              },
-            )]
-        ),
-        body: _buildList(context)
-    );
+        appBar: AppBar(title: Text('Startup Name Generator'), actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.add),
+            onPressed: () async {
+              final result = await Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Detail()),
+              );
+              setState(() {
+                if (result != null) _alarmList.add(result);
+              });
+            },
+          )
+        ]),
+        body: _buildList(context));
   }
 
   Widget _buildList(BuildContext context) {
-    return Container(padding: const EdgeInsets.all(10.0),
+    return Container(
+        padding: const EdgeInsets.all(10.0),
         child: ListView.builder(
           itemCount: _alarmList.length,
           itemBuilder: (context, index) {
             return _buildTile(_alarmList[index].on, index);
           },
-        )
-    );
+        ));
   }
 
   Widget _buildTile(bool a, int i) {
@@ -66,15 +66,15 @@ class _ChangeFormState extends State<ChangeForm> {
               Icons.block,
               color: Colors.grey[500],
               size: 45.0,
-            ), onPressed: () => setState(()=>_alarmList.removeAt(i))) ,
+            ),
+            onPressed: () => setState(() => _alarmList.removeAt(i))),
         title: Text(_alarmList[i].time),
         subtitle: Text(_alarmList[i].name),
         onChanged: (bool value) => setState(() {
-          _alarmList[i].on = !_alarmList[i].on;
-          print("i: $i , a: $a");
-          print("_activeList: $_alarmList");
-          print("value: $value");
-        })
-    );
+              _alarmList[i].on = !_alarmList[i].on;
+              print("i: $i , a: $a");
+              print("_activeList: $_alarmList");
+              print("value: $value");
+            }));
   }
 }

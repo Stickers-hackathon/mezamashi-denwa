@@ -66,7 +66,7 @@ class _ChangeFormState extends State<ChangeForm> {
 
   Widget _buildTile(String title, String sub, String type) {
     return SwitchListTile(
-        value: false,
+        value: _check[type]!,
         activeColor: Colors.orange,
         activeTrackColor: Colors.red,
         inactiveThumbColor: Colors.blue,
@@ -74,7 +74,7 @@ class _ChangeFormState extends State<ChangeForm> {
         title: Text(title),
         subtitle: Text(sub),
         onChanged: (bool value) => setState(() {
-          _check[type] = _check[type] == null ? false : !_check[type];
+          _check[type] = value;
           print("value: $value");
         })
     );

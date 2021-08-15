@@ -73,7 +73,6 @@ class _ChangeFormState extends StatelessWidget {
         subtitle: Text(alarm.name),
         onChanged: (bool value) {
           context.read<AlarmListStateNotifier>().updateAlarmActivate(i);
-          // print("i: $i");
           print("value: $value");
         });
   }

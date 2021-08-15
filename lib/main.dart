@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_state_notifier/flutter_state_notifier.dart';
-import 'package:mezamashi_denwa/alarm.dart';
 import 'package:mezamashi_denwa/state/alarm_list.dart';
 import 'package:provider/provider.dart';
 import 'detail.dart';
@@ -41,7 +40,7 @@ class _ChangeFormState extends StatelessWidget {
 
   Widget _buildList(BuildContext context) {
     final alarmListState =
-        context.select<AlarmList, List<Alarm>>((s) => s.alarmList);
+        context.select<AlarmList, List<Alarm>>((state) => state.alarmList);
 
     return Container(
         padding: const EdgeInsets.all(10.0),
@@ -49,18 +48,15 @@ class _ChangeFormState extends StatelessWidget {
           itemCount: alarmListState.length,
           itemBuilder: (context, index) {
             return Builder(builder: (context) {
-              return _buildTile(alarmListState[index].on, index, context);
+              return _buildTile(alarmListState[index], index, context);
             });
           },
         ));
   }
 
-  Widget _buildTile(bool a, int i, BuildContext context) {
-    final alarmListState =
-        context.select<AlarmList, List<Alarm>>((s) => s.alarmList);
-
+  Widget _buildTile(Alarm alarm, int i, BuildContext context) {
     return SwitchListTile(
-        value: a,
+        value: alarm.on,
         activeColor: Colors.orange,
         activeTrackColor: Colors.red,
         inactiveThumbColor: Colors.blue,
@@ -73,11 +69,11 @@ class _ChangeFormState extends StatelessWidget {
             ),
             onPressed: () =>
                 context.read<AlarmListStateNotifier>().removeAlarmListItem(i)),
-        title: Text(alarmListState[i].time),
-        subtitle: Text(alarmListState[i].name),
+        title: Text(alarm.time),
+        subtitle: Text(alarm.name),
         onChanged: (bool value) {
           context.read<AlarmListStateNotifier>().updateAlarmActivate(i);
-          print("i: $i , a: $a");
+          // print("i: $i");
           print("value: $value");
         });
   }

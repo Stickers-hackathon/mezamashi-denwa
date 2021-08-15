@@ -8,9 +8,7 @@ part 'alarm_list.freezed.dart';
 
 @freezed
 class AlarmList with _$AlarmList {
-  const factory AlarmList({
-    @Default([]) List<Alarm> alarmList
-  }) = _AlarmList;
+  const factory AlarmList({@Default([]) List<Alarm> alarmList}) = _AlarmList;
 }
 
 class AlarmListStateNotifier extends StateNotifier<AlarmList> {

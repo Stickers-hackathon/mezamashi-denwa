@@ -145,3 +145,176 @@ abstract class _AlarmList implements AlarmList {
   _$AlarmListCopyWith<_AlarmList> get copyWith =>
       throw _privateConstructorUsedError;
 }
+
+/// @nodoc
+class _$AlarmTearOff {
+  const _$AlarmTearOff();
+
+  _Alarm call({String time = "", String name = "", bool on = false}) {
+    return _Alarm(
+      time: time,
+      name: name,
+      on: on,
+    );
+  }
+}
+
+/// @nodoc
+const $Alarm = _$AlarmTearOff();
+
+/// @nodoc
+mixin _$Alarm {
+  String get time => throw _privateConstructorUsedError;
+  String get name => throw _privateConstructorUsedError;
+  bool get on => throw _privateConstructorUsedError;
+
+  @JsonKey(ignore: true)
+  $AlarmCopyWith<Alarm> get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $AlarmCopyWith<$Res> {
+  factory $AlarmCopyWith(Alarm value, $Res Function(Alarm) then) =
+      _$AlarmCopyWithImpl<$Res>;
+  $Res call({String time, String name, bool on});
+}
+
+/// @nodoc
+class _$AlarmCopyWithImpl<$Res> implements $AlarmCopyWith<$Res> {
+  _$AlarmCopyWithImpl(this._value, this._then);
+
+  final Alarm _value;
+  // ignore: unused_field
+  final $Res Function(Alarm) _then;
+
+  @override
+  $Res call({
+    Object? time = freezed,
+    Object? name = freezed,
+    Object? on = freezed,
+  }) {
+    return _then(_value.copyWith(
+      time: time == freezed
+          ? _value.time
+          : time // ignore: cast_nullable_to_non_nullable
+              as String,
+      name: name == freezed
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as String,
+      on: on == freezed
+          ? _value.on
+          : on // ignore: cast_nullable_to_non_nullable
+              as bool,
+    ));
+  }
+}
+
+/// @nodoc
+abstract class _$AlarmCopyWith<$Res> implements $AlarmCopyWith<$Res> {
+  factory _$AlarmCopyWith(_Alarm value, $Res Function(_Alarm) then) =
+      __$AlarmCopyWithImpl<$Res>;
+  @override
+  $Res call({String time, String name, bool on});
+}
+
+/// @nodoc
+class __$AlarmCopyWithImpl<$Res> extends _$AlarmCopyWithImpl<$Res>
+    implements _$AlarmCopyWith<$Res> {
+  __$AlarmCopyWithImpl(_Alarm _value, $Res Function(_Alarm) _then)
+      : super(_value, (v) => _then(v as _Alarm));
+
+  @override
+  _Alarm get _value => super._value as _Alarm;
+
+  @override
+  $Res call({
+    Object? time = freezed,
+    Object? name = freezed,
+    Object? on = freezed,
+  }) {
+    return _then(_Alarm(
+      time: time == freezed
+          ? _value.time
+          : time // ignore: cast_nullable_to_non_nullable
+              as String,
+      name: name == freezed
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as String,
+      on: on == freezed
+          ? _value.on
+          : on // ignore: cast_nullable_to_non_nullable
+              as bool,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$_Alarm with DiagnosticableTreeMixin implements _Alarm {
+  const _$_Alarm({this.time = "", this.name = "", this.on = false});
+
+  @JsonKey(defaultValue: "")
+  @override
+  final String time;
+  @JsonKey(defaultValue: "")
+  @override
+  final String name;
+  @JsonKey(defaultValue: false)
+  @override
+  final bool on;
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'Alarm(time: $time, name: $name, on: $on)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', 'Alarm'))
+      ..add(DiagnosticsProperty('time', time))
+      ..add(DiagnosticsProperty('name', name))
+      ..add(DiagnosticsProperty('on', on));
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other is _Alarm &&
+            (identical(other.time, time) ||
+                const DeepCollectionEquality().equals(other.time, time)) &&
+            (identical(other.name, name) ||
+                const DeepCollectionEquality().equals(other.name, name)) &&
+            (identical(other.on, on) ||
+                const DeepCollectionEquality().equals(other.on, on)));
+  }
+
+  @override
+  int get hashCode =>
+      runtimeType.hashCode ^
+      const DeepCollectionEquality().hash(time) ^
+      const DeepCollectionEquality().hash(name) ^
+      const DeepCollectionEquality().hash(on);
+
+  @JsonKey(ignore: true)
+  @override
+  _$AlarmCopyWith<_Alarm> get copyWith =>
+      __$AlarmCopyWithImpl<_Alarm>(this, _$identity);
+}
+
+abstract class _Alarm implements Alarm {
+  const factory _Alarm({String time, String name, bool on}) = _$_Alarm;
+
+  @override
+  String get time => throw _privateConstructorUsedError;
+  @override
+  String get name => throw _privateConstructorUsedError;
+  @override
+  bool get on => throw _privateConstructorUsedError;
+  @override
+  @JsonKey(ignore: true)
+  _$AlarmCopyWith<_Alarm> get copyWith => throw _privateConstructorUsedError;
+}

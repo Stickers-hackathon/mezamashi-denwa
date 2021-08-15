@@ -1,37 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:state_notifier/state_notifier.dart';
 import '../alarm.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:flutter/foundation.dart';
 
-class AlarmList extends ChangeNotifier {
-  var _alarmList = <Alarm>[];
+part 'alarm_list.freezed.dart';
 
-  void pushAlarmList(Alarm alarm) {
-    _alarmList.add(alarm);
-    notifyListeners();
+@freezed
+class AlarmList with _$AlarmList {
+  const factory AlarmList({
+    @Default([]) List<Alarm> alarmList
+  }) = _AlarmList;
+}
+
+class AlarmListStateNotifier extends StateNotifier<AlarmList> {
+  AlarmListStateNotifier() : super(AlarmList());
+
+  void addAlarmList(Alarm alarm) {
+    final newAlarmList = List<Alarm>.from(state.alarmList);
+    newAlarmList.add(alarm);
+    state = state.copyWith(alarmList: newAlarmList);
   }
 
   void removeAlarmListItem(int index) {
-    _alarmList.removeAt(index);
-    notifyListeners();
+    final newAlarmList = List<Alarm>.from(state.alarmList);
+    newAlarmList.removeAt(index);
+    state = state.copyWith(alarmList: newAlarmList);
   }
 
   void updateAlarmActivate(int index) {
-    _alarmList[index].on = !_alarmList[index].on;
-    notifyListeners();
-  }
-
-  int getAlarmListLength() {
-    return _alarmList.length;
-  }
-
-  bool getAlarmActiveInfo(int index) {
-    return _alarmList[index].on;
-  }
-
-  String getAlarmTime(int index) {
-    return _alarmList[index].time;
-  }
-
-  String getAlarmName(int index) {
-    return _alarmList[index].name;
+    final newAlarmList = List<Alarm>.from(state.alarmList);
+    newAlarmList[index].on = !newAlarmList[index].on;
+    state = state.copyWith(alarmList: newAlarmList);
   }
 }

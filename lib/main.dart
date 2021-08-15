@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_state_notifier/flutter_state_notifier.dart';
+import 'package:mezamashi_denwa/alarm.dart';
 import 'package:mezamashi_denwa/state/alarm_list.dart';
 import 'package:provider/provider.dart';
 import 'detail.dart';
@@ -8,8 +10,8 @@ void main() => runApp(MyApp());
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<AlarmList>(
-      create: (context) => AlarmList(),
+    return StateNotifierProvider<AlarmListStateNotifier, AlarmList>(
+      create: (context) => AlarmListStateNotifier(),
       child: MaterialApp(
         home: _ChangeFormState(),
       ),
@@ -20,8 +22,6 @@ class MyApp extends StatelessWidget {
 class _ChangeFormState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final AlarmList data = Provider.of<AlarmList>(context);
-
     return Scaffold(
         appBar: AppBar(title: Text('Startup Name Generator'), actions: <Widget>[
           IconButton(
@@ -31,7 +31,8 @@ class _ChangeFormState extends StatelessWidget {
                 context,
                 MaterialPageRoute(builder: (context) => Detail()),
               );
-              if (result != null) data.pushAlarmList(result);
+              if (result != null)
+                context.read<AlarmListStateNotifier>().addAlarmList(result);
             },
           )
         ]),
@@ -39,19 +40,25 @@ class _ChangeFormState extends StatelessWidget {
   }
 
   Widget _buildList(BuildContext context) {
-    final AlarmList data = Provider.of<AlarmList>(context);
+    final alarmListState =
+        context.select<AlarmList, List<Alarm>>((s) => s.alarmList);
+
     return Container(
         padding: const EdgeInsets.all(10.0),
         child: ListView.builder(
-          itemCount: data.getAlarmListLength(),
+          itemCount: alarmListState.length,
           itemBuilder: (context, index) {
-            return _buildTile(data.getAlarmActiveInfo(index), index, context);
+            return Builder(builder: (context) {
+              return _buildTile(alarmListState[index].on, index, context);
+            });
           },
         ));
   }
 
   Widget _buildTile(bool a, int i, BuildContext context) {
-    final AlarmList data = Provider.of<AlarmList>(context);
+    final alarmListState =
+        context.select<AlarmList, List<Alarm>>((s) => s.alarmList);
+
     return SwitchListTile(
         value: a,
         activeColor: Colors.orange,
@@ -64,11 +71,12 @@ class _ChangeFormState extends StatelessWidget {
               color: Colors.grey[500],
               size: 45.0,
             ),
-            onPressed: () => data.removeAlarmListItem(i)),
-        title: Text(data.getAlarmTime(i)),
-        subtitle: Text(data.getAlarmName(i)),
+            onPressed: () =>
+                context.read<AlarmListStateNotifier>().removeAlarmListItem(i)),
+        title: Text(alarmListState[i].time),
+        subtitle: Text(alarmListState[i].name),
         onChanged: (bool value) {
-          data.updateAlarmActivate(i);
+          context.read<AlarmListStateNotifier>().updateAlarmActivate(i);
           print("i: $i , a: $a");
           print("value: $value");
         });

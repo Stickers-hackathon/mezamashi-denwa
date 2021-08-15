@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'alarm.dart';
+import 'package:mezamashi_denwa/state/alarm_list.dart';
 
 class Detail extends StatelessWidget {
   @override
@@ -63,7 +63,7 @@ class _ChangeFormState extends State<ChangeForm> {
                 primary: Colors.black,
               ),
               onPressed: () {
-                Navigator.pop(context, Alarm(_time, 'コーリングマン', false));
+                Navigator.pop(context, Alarm().copyWith(time: _time, name: "コーリングマン", on: false));
               },
             ),
           ])

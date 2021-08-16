@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 
-Future<void> makePhoneCall(String number) async {
-  final editedNumber = number.substring(1);
-  final inputNumber = "tel:+81 $editedNumber";
-  if (await canLaunch(inputNumber)) {
-    await launch(inputNumber);
-  } else {
-    throw "Could not launch $inputNumber";
-  }
+Future<void> makePhoneCall(String inputNumber) async {
+  final editedNumber = inputNumber.substring(1);
+  final callingNumber = "tel:+81 $editedNumber";
+  FlutterPhoneDirectCaller.callNumber(callingNumber);
 }
 
 void phoneCallPopUp(BuildContext context) {

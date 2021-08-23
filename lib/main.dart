@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_state_notifier/flutter_state_notifier.dart';
+import 'package:mezamashi_denwa/call.dart';
 import 'package:mezamashi_denwa/state/alarm_list.dart';
 import 'package:provider/provider.dart';
 import 'detail.dart';
@@ -23,6 +24,12 @@ class _ChangeFormState extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(title: Text('Startup Name Generator'), actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.phone_forwarded),
+            onPressed: () {
+              phoneCallPopUp(context);
+            },
+          ),
           IconButton(
             icon: Icon(Icons.add),
             onPressed: () async {

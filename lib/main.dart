@@ -4,8 +4,42 @@ import 'package:mezamashi_denwa/state/alarm_list.dart';
 import 'package:provider/provider.dart';
 import 'detail.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_native_timezone/flutter_native_timezone.dart';
+import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 
-void main() => runApp(MyApp());
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+// initialise the plugin. app_icon needs to be a added as a drawable resource to the Android head project
+
+String? selectedNotificationPayload;
+
+Future<void> main() async {
+  // needed if you intend to initialize in the `main` function
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await _configureLocalTimeZone();
+
+  const AndroidInitializationSettings initializationSettingsAndroid = AndroidInitializationSettings('app_icon');
+  final IOSInitializationSettings initializationSettingsIOS = IOSInitializationSettings();
+  final InitializationSettings initializationSettings = InitializationSettings(
+    android: initializationSettingsAndroid,
+    iOS: initializationSettingsIOS,);
+  await flutterLocalNotificationsPlugin.initialize(initializationSettings,
+      onSelectNotification: (String? payload) async {
+        if (payload != null) {
+          debugPrint('notification payload: $payload');
+        }
+        selectedNotificationPayload = payload;
+      });
+
+  runApp(MyApp());
+}
+
+Future<void> _configureLocalTimeZone() async {
+  tz.initializeTimeZones();
+  final String? timeZoneName = await FlutterNativeTimezone.getLocalTimezone();
+  tz.setLocalLocation(tz.getLocation(timeZoneName!));
+}
 
 class MyApp extends StatelessWidget {
   @override
@@ -13,7 +47,7 @@ class MyApp extends StatelessWidget {
     return StateNotifierProvider<AlarmListStateNotifier, AlarmList>(
       create: (context) => AlarmListStateNotifier(),
       child: MaterialApp(
-        home: MyHomePage(),
+        home: _ChangeFormState(),
       ),
     );
   }
@@ -70,87 +104,39 @@ class _ChangeFormState extends StatelessWidget {
             ),
             onPressed: () =>
                 context.read<AlarmListStateNotifier>().removeAlarmListItem(i)),
-        title: Text(alarm.time),
+        title: Text("${alarm.time.hour}:${alarm.time.minute}"),
         subtitle: Text(alarm.name),
         onChanged: (bool value) {
+          alarm.on ? _cancelNotification() : _zonedScheduleNotification(alarm.time, i);
           context.read<AlarmListStateNotifier>().updateAlarmActivate(i);
           print("value: $value");
         });
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  // MyHomePage({Key key, this.title}) : super(key: key);
-  // final String title;
+Future<void> _zonedScheduleNotification(TimeOfDay t, int i) async {
+  tz.TZDateTime _nextInstanceOfTime() {
+    final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
+    tz.TZDateTime scheduledDate = tz.TZDateTime(tz.local, now.year, now.month, now.day, t.hour, t.minute);
+    if (scheduledDate.isBefore(now)) {
+      scheduledDate = scheduledDate.add(const Duration(days: 1));
+    }
+    return scheduledDate;
+  }
 
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
+  await flutterLocalNotificationsPlugin.zonedSchedule(
+      i,
+      'scheduled title',
+      'scheduled body',
+      _nextInstanceOfTime(),
+      const NotificationDetails(
+          android: AndroidNotificationDetails('your channel id',
+              'your channel name', 'your channel description')),
+      androidAllowWhileIdle: true,
+      uiLocalNotificationDateInterpretation:
+      UILocalNotificationDateInterpretation.absoluteTime);
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
-
-  @override
-  void initState() {
-    super.initState();
-
-    var initializationSettingsAndroid =
-    new AndroidInitializationSettings('app_icon');
-    var initializationSettingsIOS = new IOSInitializationSettings();
-    var initializationSettings = new InitializationSettings(
-        initializationSettingsAndroid, initializationSettingsIOS);
-    flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
-    flutterLocalNotificationsPlugin.initialize(initializationSettings);
-  }
-
-  // notification
-  Future _showNotification() async {
-    var time = new Time(8, 0, 0);
-    var androidPlatformChannelSpecifics = new AndroidNotificationDetails(
-        'your channel id', 'your channel name', 'your channel description',
-        importance: Importance.Max, priority: Priority.High);
-    var iOSPlatformChannelSpecifics = new IOSNotificationDetails();
-    var platformChannelSpecifics = new NotificationDetails(
-        androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
-    await flutterLocalNotificationsPlugin.showDailyAtTime(
-      0,
-      'Timer',
-      'You should check the app',
-      time,
-      platformChannelSpecifics,
-      payload: 'Default_Sound',
-    );
-  }
-
-  void _setSchedular() {
-    _showNotification();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              'Hello World',
-              style: Theme.of(context).textTheme.display1,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _setSchedular,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
-    );
-  }
+Future<void> _cancelNotification() async {
+  await flutterLocalNotificationsPlugin.cancel(0);
 }

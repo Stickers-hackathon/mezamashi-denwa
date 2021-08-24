@@ -13,7 +13,7 @@ class AlarmList with _$AlarmList {
 @freezed
 class Alarm with _$Alarm {
   const factory Alarm(
-      {@Default("") String time,
+      {@Default(TimeOfDay(hour: 0, minute: 0)) TimeOfDay time,
       @Default("") String name,
       @Default(false) bool on}) = _Alarm;
 }

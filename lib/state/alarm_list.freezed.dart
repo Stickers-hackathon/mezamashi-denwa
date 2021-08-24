@@ -150,7 +150,10 @@ abstract class _AlarmList implements AlarmList {
 class _$AlarmTearOff {
   const _$AlarmTearOff();
 
-  _Alarm call({String time = "", String name = "", bool on = false}) {
+  _Alarm call(
+      {TimeOfDay time = const TimeOfDay(hour: 0, minute: 0),
+      String name = "",
+      bool on = false}) {
     return _Alarm(
       time: time,
       name: name,
@@ -164,7 +167,7 @@ const $Alarm = _$AlarmTearOff();
 
 /// @nodoc
 mixin _$Alarm {
-  String get time => throw _privateConstructorUsedError;
+  TimeOfDay get time => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
   bool get on => throw _privateConstructorUsedError;
 
@@ -176,7 +179,7 @@ mixin _$Alarm {
 abstract class $AlarmCopyWith<$Res> {
   factory $AlarmCopyWith(Alarm value, $Res Function(Alarm) then) =
       _$AlarmCopyWithImpl<$Res>;
-  $Res call({String time, String name, bool on});
+  $Res call({TimeOfDay time, String name, bool on});
 }
 
 /// @nodoc
@@ -197,7 +200,7 @@ class _$AlarmCopyWithImpl<$Res> implements $AlarmCopyWith<$Res> {
       time: time == freezed
           ? _value.time
           : time // ignore: cast_nullable_to_non_nullable
-              as String,
+              as TimeOfDay,
       name: name == freezed
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -215,7 +218,7 @@ abstract class _$AlarmCopyWith<$Res> implements $AlarmCopyWith<$Res> {
   factory _$AlarmCopyWith(_Alarm value, $Res Function(_Alarm) then) =
       __$AlarmCopyWithImpl<$Res>;
   @override
-  $Res call({String time, String name, bool on});
+  $Res call({TimeOfDay time, String name, bool on});
 }
 
 /// @nodoc
@@ -237,7 +240,7 @@ class __$AlarmCopyWithImpl<$Res> extends _$AlarmCopyWithImpl<$Res>
       time: time == freezed
           ? _value.time
           : time // ignore: cast_nullable_to_non_nullable
-              as String,
+              as TimeOfDay,
       name: name == freezed
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -253,11 +256,14 @@ class __$AlarmCopyWithImpl<$Res> extends _$AlarmCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_Alarm with DiagnosticableTreeMixin implements _Alarm {
-  const _$_Alarm({this.time = "", this.name = "", this.on = false});
+  const _$_Alarm(
+      {this.time = const TimeOfDay(hour: 0, minute: 0),
+      this.name = "",
+      this.on = false});
 
-  @JsonKey(defaultValue: "")
+  @JsonKey(defaultValue: const TimeOfDay(hour: 0, minute: 0))
   @override
-  final String time;
+  final TimeOfDay time;
   @JsonKey(defaultValue: "")
   @override
   final String name;
@@ -306,10 +312,10 @@ class _$_Alarm with DiagnosticableTreeMixin implements _Alarm {
 }
 
 abstract class _Alarm implements Alarm {
-  const factory _Alarm({String time, String name, bool on}) = _$_Alarm;
+  const factory _Alarm({TimeOfDay time, String name, bool on}) = _$_Alarm;
 
   @override
-  String get time => throw _privateConstructorUsedError;
+  TimeOfDay get time => throw _privateConstructorUsedError;
   @override
   String get name => throw _privateConstructorUsedError;
   @override

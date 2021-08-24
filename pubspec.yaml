@@ -29,6 +29,7 @@ dependencies:
   flutter_state_notifier: ^0.7.0
   freezed_annotation: ^0.14.2
   flutter_local_notifications: ^8.1.1+1
+  flutter_native_timezone: ^2.0.0
 
 dev_dependencies:
   freezed: ^0.14.2

@@ -21,6 +21,10 @@ class Alarm with _$Alarm {
 class AlarmListStateNotifier extends StateNotifier<AlarmList> {
   AlarmListStateNotifier() : super(AlarmList());
 
+  void setAlarmList(List<Alarm> alarmList) {
+    state = state.copyWith(alarmList: alarmList);
+  }
+
   void addAlarmList(Alarm alarm) {
     final newAlarmList = List<Alarm>.from(state.alarmList);
     newAlarmList.add(alarm);

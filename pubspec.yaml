@@ -29,6 +29,7 @@ dependencies:
   flutter_state_notifier: ^0.7.0
   freezed_annotation: ^0.14.2
   flutter_phone_direct_caller: ^2.0.0
+  shared_preferences: ^2.0.7
 
 dev_dependencies:
   freezed: ^0.14.2

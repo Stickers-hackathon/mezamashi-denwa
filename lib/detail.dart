@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mezamashi_denwa/state/alarm_list.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:flutter/cupertino.dart';
+import 'contacts.dart';
 
 class Detail extends StatelessWidget {
   @override
@@ -19,6 +22,7 @@ class ChangeForm extends StatefulWidget {
 }
 
 class _ChangeFormState extends State<ChangeForm> {
+  String callingMan = 'ランダム';
   String _time = "00:00";
   Map<String, bool> _check = {
     'sound': false,
@@ -45,7 +49,36 @@ class _ChangeFormState extends State<ChangeForm> {
           Column(children: <Widget>[
             _buildTile("アラーム音", "beep", "sound"),
             _buildTile("バイブ", "basic call", "vibration"),
-            _buildTile("かける相手指定", "jeep", "name"),
+            _buildTile("かける相手指定", callingMan, "name"),
+            TextButton(
+                onPressed: () async {
+                  final PermissionStatus permissionStatus = await _getPermission();
+
+                  if (permissionStatus == PermissionStatus.granted) {
+                     final result = await Navigator.push(
+                      // context, MaterialPageRoute(builder: (context) => ContactsPage()));
+                        context, MaterialPageRoute(builder: (context) => ContactsPage()));
+                     setState(() {
+                       callingMan = result;
+                     });
+                  } else {
+                    //If permissions have been denied show standard cupertino alert dialog
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) => CupertinoAlertDialog(
+                          title: Text('Permissions error'),
+                          content: Text('Please enable contacts access '
+                              'permission in system settings'),
+                          actions: <Widget>[
+                            CupertinoDialogAction(
+                              child: Text('OK'),
+                              onPressed: () => Navigator.of(context).pop(),
+                            )
+                          ],
+                        ));
+                  }
+                },
+                child: Text('連絡先を指定する'))
           ]),
           Row(children: <Widget>[
             TextButton(
@@ -63,7 +96,7 @@ class _ChangeFormState extends State<ChangeForm> {
                 primary: Colors.black,
               ),
               onPressed: () {
-                Navigator.pop(context, Alarm().copyWith(time: _time, name: "コーリングマン", on: false));
+                Navigator.pop(context, Alarm().copyWith(time: _time, name: callingMan, on: false));
               },
             ),
           ])
@@ -83,5 +116,20 @@ class _ChangeFormState extends State<ChangeForm> {
               _check[type] = value;
               print("value: $value");
             }));
+  }
+}
+
+
+//Check contacts permission
+Future<PermissionStatus> _getPermission() async {
+  final PermissionStatus permission = await Permission.contacts.status;
+  print(permission);
+  if (permission != PermissionStatus.granted) {
+    final Map<Permission, PermissionStatus> permissionStatus =
+    await [Permission.contacts].request();
+    return permissionStatus[Permission.contacts] ??
+        PermissionStatus.denied;
+  } else {
+    return permission;
   }
 }

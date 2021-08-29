@@ -34,9 +34,29 @@ class Storage {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     List<String>? jsonData =
         prefs.getStringList(_getKey(PreferenceKeys.alarmList));
-    List<Alarm> alarmList = jsonData!.map((e) => Alarm.fromJson(json.decode(e))).toList();
+    List<Alarm> alarmList =
+        jsonData!.map((e) => Alarm.fromJson(json.decode(e))).toList();
     alarmList.removeWhere((element) => element.id == id);
-    final newAlarmListJson = alarmList.map((e) => json.encode(e.toJson())).toList();
-    return await prefs.setStringList(_getKey(PreferenceKeys.alarmList), newAlarmListJson);
+    final newAlarmListJson =
+        alarmList.map((e) => json.encode(e.toJson())).toList();
+    return await prefs.setStringList(
+        _getKey(PreferenceKeys.alarmList), newAlarmListJson);
+  }
+
+  Future<bool> updateAlarm(Alarm alarm) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String>? jsonData =
+        prefs.getStringList(_getKey(PreferenceKeys.alarmList));
+    List<Alarm> alarmList =
+        jsonData!.map((e) => Alarm.fromJson(json.decode(e))).toList();
+    int alarmIndex = alarmList.indexWhere((element) => element.id == alarm.id);
+    // idが等しいアラームを一度削除
+    alarmList.removeAt(alarmIndex);
+    // 削除したのちに更新されたアラームを挿入
+    alarmList.insert(alarmIndex, alarm);
+    final newAlarmListJson =
+        alarmList.map((e) => json.encode(e.toJson())).toList();
+    return await prefs.setStringList(
+        _getKey(PreferenceKeys.alarmList), newAlarmListJson);
   }
 }

@@ -28,6 +28,7 @@ dependencies:
   state_notifier: ^0.7.0
   flutter_state_notifier: ^0.7.0
   freezed_annotation: ^0.14.2
+  flutter_phone_direct_caller: ^2.0.0
   flutter_local_notifications: ^8.1.1+1
   flutter_native_timezone: ^2.0.0
   android_alarm_manager_plus: ^1.2.0

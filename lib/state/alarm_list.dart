@@ -4,6 +4,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:flutter/foundation.dart';
 
 part 'alarm_list.freezed.dart';
+part 'alarm_list.g.dart';
 
 @freezed
 class AlarmList with _$AlarmList {
@@ -13,9 +14,13 @@ class AlarmList with _$AlarmList {
 @freezed
 class Alarm with _$Alarm {
   const factory Alarm(
-      {@Default("") String time,
-      @Default("") String name,
-      @Default(false) bool on}) = _Alarm;
+      {
+        @JsonKey(name: "id") @Default(0) int id,
+        @JsonKey(name: "time") @Default("") String time,
+      @JsonKey(name: "name") @Default("") String name,
+      @JsonKey(name: "on") @Default(false) bool on}) = _Alarm;
+
+  factory Alarm.fromJson(Map<String, dynamic> json) => _$AlarmFromJson(json);
 }
 
 class AlarmListStateNotifier extends StateNotifier<AlarmList> {

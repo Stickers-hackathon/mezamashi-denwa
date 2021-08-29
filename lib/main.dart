@@ -24,7 +24,6 @@ class _ChangeFormState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var initialState = context.read<AlarmListStateNotifier>().state.alarmList;
-    print(initialState);
     if (initialState.isEmpty) {
       () async {
         final storage = new Storage();

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_state_notifier/flutter_state_notifier.dart';
 import 'package:mezamashi_denwa/call.dart';
 import 'package:mezamashi_denwa/state/alarm_list.dart';
+import 'package:mezamashi_denwa/storage/alarm_list.dart';
 import 'package:provider/provider.dart';
 import 'detail.dart';
 
@@ -22,6 +23,16 @@ class MyApp extends StatelessWidget {
 class _ChangeFormState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    var initialState = context.read<AlarmListStateNotifier>().state.alarmList;
+    print(initialState);
+    if (initialState.isEmpty) {
+      () async {
+        final storage = new Storage();
+        initialState = await storage.getAlarmList();
+        context.read<AlarmListStateNotifier>().setAlarmList(initialState);
+      }();
+    }
+
     return Scaffold(
         appBar: AppBar(title: Text('Startup Name Generator'), actions: <Widget>[
           IconButton(

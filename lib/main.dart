@@ -7,6 +7,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
+import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 // initialise the plugin. app_icon needs to be a added as a drawable resource to the Android head project
@@ -31,6 +32,8 @@ Future<void> main() async {
         }
         selectedNotificationPayload = payload;
       });
+
+  await AndroidAlarmManager.initialize();
 
   runApp(MyApp());
 }
@@ -135,8 +138,15 @@ Future<void> _zonedScheduleNotification(TimeOfDay t, int i) async {
       androidAllowWhileIdle: true,
       uiLocalNotificationDateInterpretation:
       UILocalNotificationDateInterpretation.absoluteTime);
+
+  await AndroidAlarmManager.periodic(const Duration(seconds: 15), 0, printHello);
 }
 
 Future<void> _cancelNotification() async {
   await flutterLocalNotificationsPlugin.cancel(0);
+}
+
+Future<void> printHello() async {
+  final DateTime now = DateTime.now();
+  print("[$now] Hello, world! function='$printHello'");
 }

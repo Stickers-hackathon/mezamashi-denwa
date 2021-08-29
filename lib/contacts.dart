@@ -22,7 +22,6 @@ class _ContactsPageState extends State<ContactsPage> {
     final Iterable<Contact> contacts = await ContactsService.getContacts();
     setState(() {
       _contacts = contacts;
-      print(contacts);
     });
   }
 
@@ -32,30 +31,44 @@ class _ContactsPageState extends State<ContactsPage> {
       appBar: AppBar(
         title: (Text('電話をかける人')),
       ),
-      body: _contacts != null
-      //Build a list view of all contacts, displaying their avatar and
-      // display name
-          ? ListView.builder(
-        itemCount: _contacts?.length ?? 0,
+      body: _contacts != null ? ListView.builder(
+        itemCount: _contacts != null ? _contacts!.length + 1 : 0,
         itemBuilder: (BuildContext context, int index) {
-          Contact? contact = _contacts?.elementAt(index);
-          return Container(
-            margin: EdgeInsets.all(1.0),
-            padding: EdgeInsets.all(1.0),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15.0),
-                color: Colors.white
-            ),
-            child: ListTile(
-              title: Text(contact?.displayName ?? ''),
-              onTap:  () {
-                Navigator.pop(context, contact?.displayName);
-              },
-              //This can be further expanded to showing contacts detail
-              // onPressed().
-            ),
-          );
-        },
+          Contact? contact;
+          if (index == 0) {
+            return Container(
+              margin: EdgeInsets.all(1.0),
+              padding: EdgeInsets.all(1.0),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15.0),
+                  color: Colors.white
+              ),
+              child: ListTile(
+                title: Text("ランダム"),
+                onTap:  () {
+                  Navigator.pop(context, ["ランダム", _contacts?.elementAt(0).phones?.elementAt(0).value]);
+                },
+              ),
+            );
+          }else {
+            contact = _contacts?.elementAt(index-1);
+            return Container(
+              margin: EdgeInsets.all(1.0),
+              padding: EdgeInsets.all(1.0),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15.0),
+                  color: Colors.white
+              ),
+              child: ListTile(
+                title: Text(contact?.displayName ?? ''),
+                subtitle: Text(contact?.phones?.elementAt(0).value ?? ''),
+                onTap:  () {
+                  Navigator.pop(context, [contact?.displayName, contact?.phones?.elementAt(0).value]);
+                },
+              ),
+            );
+          }
+        }
       )
           : Center(child: const CircularProgressIndicator()),
     );

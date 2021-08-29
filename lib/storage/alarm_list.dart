@@ -7,6 +7,8 @@ enum PreferenceKeys {
 }
 
 class Storage {
+  Storage();
+
   String _getKey(PreferenceKeys key) {
     switch (key) {
       case PreferenceKeys.alarmList:

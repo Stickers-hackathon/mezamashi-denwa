@@ -12,10 +12,11 @@ class AlarmList with _$AlarmList {
 
 @freezed
 class Alarm with _$Alarm {
-  const factory Alarm(
-      {@Default("") String time,
-      @Default("") String name,
-      @Default(false) bool on}) = _Alarm;
+  const factory Alarm({
+        @Default("") String time,
+        @Default("") String name,
+        @Default("") String phoneNumber,
+        @Default(false) bool on}) = _Alarm;
 }
 
 class AlarmListStateNotifier extends StateNotifier<AlarmList> {

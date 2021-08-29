@@ -150,10 +150,15 @@ abstract class _AlarmList implements AlarmList {
 class _$AlarmTearOff {
   const _$AlarmTearOff();
 
-  _Alarm call({String time = "", String name = "", bool on = false}) {
+  _Alarm call(
+      {String time = "",
+      String name = "",
+      String phoneNumber = "",
+      bool on = false}) {
     return _Alarm(
       time: time,
       name: name,
+      phoneNumber: phoneNumber,
       on: on,
     );
   }
@@ -166,6 +171,7 @@ const $Alarm = _$AlarmTearOff();
 mixin _$Alarm {
   String get time => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
+  String get phoneNumber => throw _privateConstructorUsedError;
   bool get on => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -176,7 +182,7 @@ mixin _$Alarm {
 abstract class $AlarmCopyWith<$Res> {
   factory $AlarmCopyWith(Alarm value, $Res Function(Alarm) then) =
       _$AlarmCopyWithImpl<$Res>;
-  $Res call({String time, String name, bool on});
+  $Res call({String time, String name, String phoneNumber, bool on});
 }
 
 /// @nodoc
@@ -191,6 +197,7 @@ class _$AlarmCopyWithImpl<$Res> implements $AlarmCopyWith<$Res> {
   $Res call({
     Object? time = freezed,
     Object? name = freezed,
+    Object? phoneNumber = freezed,
     Object? on = freezed,
   }) {
     return _then(_value.copyWith(
@@ -201,6 +208,10 @@ class _$AlarmCopyWithImpl<$Res> implements $AlarmCopyWith<$Res> {
       name: name == freezed
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
+              as String,
+      phoneNumber: phoneNumber == freezed
+          ? _value.phoneNumber
+          : phoneNumber // ignore: cast_nullable_to_non_nullable
               as String,
       on: on == freezed
           ? _value.on
@@ -215,7 +226,7 @@ abstract class _$AlarmCopyWith<$Res> implements $AlarmCopyWith<$Res> {
   factory _$AlarmCopyWith(_Alarm value, $Res Function(_Alarm) then) =
       __$AlarmCopyWithImpl<$Res>;
   @override
-  $Res call({String time, String name, bool on});
+  $Res call({String time, String name, String phoneNumber, bool on});
 }
 
 /// @nodoc
@@ -231,6 +242,7 @@ class __$AlarmCopyWithImpl<$Res> extends _$AlarmCopyWithImpl<$Res>
   $Res call({
     Object? time = freezed,
     Object? name = freezed,
+    Object? phoneNumber = freezed,
     Object? on = freezed,
   }) {
     return _then(_Alarm(
@@ -241,6 +253,10 @@ class __$AlarmCopyWithImpl<$Res> extends _$AlarmCopyWithImpl<$Res>
       name: name == freezed
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
+              as String,
+      phoneNumber: phoneNumber == freezed
+          ? _value.phoneNumber
+          : phoneNumber // ignore: cast_nullable_to_non_nullable
               as String,
       on: on == freezed
           ? _value.on
@@ -253,7 +269,8 @@ class __$AlarmCopyWithImpl<$Res> extends _$AlarmCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_Alarm with DiagnosticableTreeMixin implements _Alarm {
-  const _$_Alarm({this.time = "", this.name = "", this.on = false});
+  const _$_Alarm(
+      {this.time = "", this.name = "", this.phoneNumber = "", this.on = false});
 
   @JsonKey(defaultValue: "")
   @override
@@ -261,13 +278,16 @@ class _$_Alarm with DiagnosticableTreeMixin implements _Alarm {
   @JsonKey(defaultValue: "")
   @override
   final String name;
+  @JsonKey(defaultValue: "")
+  @override
+  final String phoneNumber;
   @JsonKey(defaultValue: false)
   @override
   final bool on;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'Alarm(time: $time, name: $name, on: $on)';
+    return 'Alarm(time: $time, name: $name, phoneNumber: $phoneNumber, on: $on)';
   }
 
   @override
@@ -277,6 +297,7 @@ class _$_Alarm with DiagnosticableTreeMixin implements _Alarm {
       ..add(DiagnosticsProperty('type', 'Alarm'))
       ..add(DiagnosticsProperty('time', time))
       ..add(DiagnosticsProperty('name', name))
+      ..add(DiagnosticsProperty('phoneNumber', phoneNumber))
       ..add(DiagnosticsProperty('on', on));
   }
 
@@ -288,6 +309,9 @@ class _$_Alarm with DiagnosticableTreeMixin implements _Alarm {
                 const DeepCollectionEquality().equals(other.time, time)) &&
             (identical(other.name, name) ||
                 const DeepCollectionEquality().equals(other.name, name)) &&
+            (identical(other.phoneNumber, phoneNumber) ||
+                const DeepCollectionEquality()
+                    .equals(other.phoneNumber, phoneNumber)) &&
             (identical(other.on, on) ||
                 const DeepCollectionEquality().equals(other.on, on)));
   }
@@ -297,6 +321,7 @@ class _$_Alarm with DiagnosticableTreeMixin implements _Alarm {
       runtimeType.hashCode ^
       const DeepCollectionEquality().hash(time) ^
       const DeepCollectionEquality().hash(name) ^
+      const DeepCollectionEquality().hash(phoneNumber) ^
       const DeepCollectionEquality().hash(on);
 
   @JsonKey(ignore: true)
@@ -306,12 +331,15 @@ class _$_Alarm with DiagnosticableTreeMixin implements _Alarm {
 }
 
 abstract class _Alarm implements Alarm {
-  const factory _Alarm({String time, String name, bool on}) = _$_Alarm;
+  const factory _Alarm(
+      {String time, String name, String phoneNumber, bool on}) = _$_Alarm;
 
   @override
   String get time => throw _privateConstructorUsedError;
   @override
   String get name => throw _privateConstructorUsedError;
+  @override
+  String get phoneNumber => throw _privateConstructorUsedError;
   @override
   bool get on => throw _privateConstructorUsedError;
   @override

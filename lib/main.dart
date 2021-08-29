@@ -91,9 +91,12 @@ class _ChangeFormState extends StatelessWidget {
             }),
         title: Text(alarm.time),
         subtitle: Text(alarm.name),
-        onChanged: (bool value) {
-          context.read<AlarmListStateNotifier>().updateAlarmActivate(i);
-          print("value: $value");
+        onChanged: (bool value) async {
+          final storage = Storage();
+          final successful = await storage.updateAlarm(Alarm().copyWith(
+              id: alarm.id, name: alarm.name, time: alarm.time, on: !alarm.on));
+          if (successful)
+            context.read<AlarmListStateNotifier>().updateAlarmActivate(i);
         });
   }
 }

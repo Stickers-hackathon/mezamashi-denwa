@@ -22,7 +22,8 @@ class ChangeForm extends StatefulWidget {
 }
 
 class _ChangeFormState extends State<ChangeForm> {
-  String callingMan = 'ランダム';
+  String _name = "ランダム";
+  String _phoneNumber = "";
   String _time = "00:00";
   Map<String, bool> _check = {
     'sound': false,
@@ -49,20 +50,22 @@ class _ChangeFormState extends State<ChangeForm> {
           Column(children: <Widget>[
             _buildTile("アラーム音", "beep", "sound"),
             _buildTile("バイブ", "basic call", "vibration"),
-            _buildTile("かける相手指定", callingMan, "name"),
-            TextButton(
-                onPressed: () async {
+            ListTile(
+                title: Text("誰に電話をかける？"),
+                subtitle: Text(_name),
+                onTap:  () async {
+                  //権限の確認
                   final PermissionStatus permissionStatus = await _getPermission();
-
                   if (permissionStatus == PermissionStatus.granted) {
-                     final result = await Navigator.push(
-                      // context, MaterialPageRoute(builder: (context) => ContactsPage()));
+                    //連絡先アクセスの許可がある時一覧ページに遷移
+                    final result = await Navigator.push(
                         context, MaterialPageRoute(builder: (context) => ContactsPage()));
-                     setState(() {
-                       callingMan = result;
-                     });
+                    setState(() {
+                      _name = result[0];
+                      _phoneNumber = result[1];
+                    });
                   } else {
-                    //If permissions have been denied show standard cupertino alert dialog
+                    //連絡先アクセスの許可がない時その旨を表示
                     showDialog(
                         context: context,
                         builder: (BuildContext context) => CupertinoAlertDialog(
@@ -78,7 +81,7 @@ class _ChangeFormState extends State<ChangeForm> {
                         ));
                   }
                 },
-                child: Text('連絡先を指定する'))
+              ),
           ]),
           Row(children: <Widget>[
             TextButton(
@@ -96,7 +99,7 @@ class _ChangeFormState extends State<ChangeForm> {
                 primary: Colors.black,
               ),
               onPressed: () {
-                Navigator.pop(context, Alarm().copyWith(time: _time, name: callingMan, on: false));
+                Navigator.pop(context, Alarm().copyWith(time: _time, name: _name, phoneNumber: _phoneNumber,on: false));
               },
             ),
           ])

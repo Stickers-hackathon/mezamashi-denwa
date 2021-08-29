@@ -26,8 +26,8 @@ class Storage {
   Future<int> getNextAlarmId() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     List<String>? jsonData =
-        prefs.getStringList(_getKey(PreferenceKeys.alarmId));
-    if (jsonData != null) {
+        prefs.getStringList(_getKey(PreferenceKeys.alarmList));
+    if (jsonData != null && jsonData.isNotEmpty) {
       List<Alarm> alarmList =
           jsonData.map((e) => Alarm.fromJson(json.decode(e))).toList();
       Iterable<int> alarmIds = alarmList.map((e) => e.id);

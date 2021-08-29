@@ -59,4 +59,15 @@ class Storage {
     return await prefs.setStringList(
         _getKey(PreferenceKeys.alarmList), newAlarmListJson);
   }
+
+  Future<List<Alarm>> getAlarmList() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String>? jsonData =
+        prefs.getStringList(_getKey(PreferenceKeys.alarmList));
+    if (jsonData != null) {
+      return jsonData.map((e) => Alarm.fromJson(json.decode(e))).toList();
+    } else {
+      return [];
+    }
+  }
 }

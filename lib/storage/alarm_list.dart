@@ -1,9 +1,12 @@
+import 'dart:math';
+
 import 'package:mezamashi_denwa/state/alarm_list.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
 enum PreferenceKeys {
   alarmList,
+  alarmId,
 }
 
 class Storage {
@@ -13,8 +16,24 @@ class Storage {
     switch (key) {
       case PreferenceKeys.alarmList:
         return "alarm_list";
+      case PreferenceKeys.alarmId:
+        return "alarm_id";
       default:
         return "";
+    }
+  }
+
+  Future<int> getNextAlarmId() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String>? jsonData =
+        prefs.getStringList(_getKey(PreferenceKeys.alarmId));
+    if (jsonData != null) {
+      List<Alarm> alarmList =
+          jsonData.map((e) => Alarm.fromJson(json.decode(e))).toList();
+      Iterable<int> alarmIds = alarmList.map((e) => e.id);
+      return alarmIds.reduce(max) + 1;
+    } else {
+      return 1;
     }
   }
 

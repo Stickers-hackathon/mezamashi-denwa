@@ -85,8 +85,11 @@ class _ChangeFormState extends StatelessWidget {
               color: Colors.grey[500],
               size: 45.0,
             ),
-            onPressed: () =>
-                context.read<AlarmListStateNotifier>().removeAlarmListItem(i)),
+            onPressed: () async {
+              final storage = Storage();
+              storage.deleteAlarm(alarm.id);
+              context.read<AlarmListStateNotifier>().removeAlarmListItem(i);
+            }),
         title: Text(alarm.time),
         subtitle: Text(alarm.name),
         onChanged: (bool value) {

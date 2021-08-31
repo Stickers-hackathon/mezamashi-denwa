@@ -1,16 +1,9 @@
-# mezamashi_denwa
+# めざまし電話
 
-A new Flutter project.
+必ず起きれる目覚まし時計を目指して作りました。
 
-## Getting Started
+指定した時刻にアラームが鳴り、1分以内に操作しなければ連絡先の中からランダムに選ばれた相手に自動で電話がかかる迷惑アプリです。
 
-This project is a starting point for a Flutter application.
+知り合いに朝っぱらから意味もなく電話して迷惑をかけたくないと思えば、早く起きられます。
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+それでも起きなければ電話でつながった相手に起こしてもらいましょう。機械的な音声や振動より人間の声の方が起きやすいと思います。

@@ -146,21 +146,29 @@ abstract class _AlarmList implements AlarmList {
       throw _privateConstructorUsedError;
 }
 
+Alarm _$AlarmFromJson(Map<String, dynamic> json) {
+  return _Alarm.fromJson(json);
+}
+
 /// @nodoc
 class _$AlarmTearOff {
   const _$AlarmTearOff();
 
   _Alarm call(
-      {String time = "",
-      String name = "",
-      String phoneNumber = "",
-      bool on = false}) {
+      {@JsonKey(name: "id") int id = 0,
+      @JsonKey(name: "time") String time = "",
+      @JsonKey(name: "name") String name = "",
+      @JsonKey(name: "on") bool on = false}) {
     return _Alarm(
+      id: id,
       time: time,
       name: name,
-      phoneNumber: phoneNumber,
       on: on,
     );
+  }
+
+  Alarm fromJson(Map<String, Object> json) {
+    return Alarm.fromJson(json);
   }
 }
 
@@ -169,11 +177,16 @@ const $Alarm = _$AlarmTearOff();
 
 /// @nodoc
 mixin _$Alarm {
+  @JsonKey(name: "id")
+  int get id => throw _privateConstructorUsedError;
+  @JsonKey(name: "time")
   String get time => throw _privateConstructorUsedError;
+  @JsonKey(name: "name")
   String get name => throw _privateConstructorUsedError;
-  String get phoneNumber => throw _privateConstructorUsedError;
+  @JsonKey(name: "on")
   bool get on => throw _privateConstructorUsedError;
 
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   $AlarmCopyWith<Alarm> get copyWith => throw _privateConstructorUsedError;
 }
@@ -182,7 +195,11 @@ mixin _$Alarm {
 abstract class $AlarmCopyWith<$Res> {
   factory $AlarmCopyWith(Alarm value, $Res Function(Alarm) then) =
       _$AlarmCopyWithImpl<$Res>;
-  $Res call({String time, String name, String phoneNumber, bool on});
+  $Res call(
+      {@JsonKey(name: "id") int id,
+      @JsonKey(name: "time") String time,
+      @JsonKey(name: "name") String name,
+      @JsonKey(name: "on") bool on});
 }
 
 /// @nodoc
@@ -195,12 +212,16 @@ class _$AlarmCopyWithImpl<$Res> implements $AlarmCopyWith<$Res> {
 
   @override
   $Res call({
+    Object? id = freezed,
     Object? time = freezed,
     Object? name = freezed,
-    Object? phoneNumber = freezed,
     Object? on = freezed,
   }) {
     return _then(_value.copyWith(
+      id: id == freezed
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int,
       time: time == freezed
           ? _value.time
           : time // ignore: cast_nullable_to_non_nullable
@@ -208,10 +229,6 @@ class _$AlarmCopyWithImpl<$Res> implements $AlarmCopyWith<$Res> {
       name: name == freezed
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
-              as String,
-      phoneNumber: phoneNumber == freezed
-          ? _value.phoneNumber
-          : phoneNumber // ignore: cast_nullable_to_non_nullable
               as String,
       on: on == freezed
           ? _value.on
@@ -226,7 +243,11 @@ abstract class _$AlarmCopyWith<$Res> implements $AlarmCopyWith<$Res> {
   factory _$AlarmCopyWith(_Alarm value, $Res Function(_Alarm) then) =
       __$AlarmCopyWithImpl<$Res>;
   @override
-  $Res call({String time, String name, String phoneNumber, bool on});
+  $Res call(
+      {@JsonKey(name: "id") int id,
+      @JsonKey(name: "time") String time,
+      @JsonKey(name: "name") String name,
+      @JsonKey(name: "on") bool on});
 }
 
 /// @nodoc
@@ -240,12 +261,16 @@ class __$AlarmCopyWithImpl<$Res> extends _$AlarmCopyWithImpl<$Res>
 
   @override
   $Res call({
+    Object? id = freezed,
     Object? time = freezed,
     Object? name = freezed,
-    Object? phoneNumber = freezed,
     Object? on = freezed,
   }) {
     return _then(_Alarm(
+      id: id == freezed
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int,
       time: time == freezed
           ? _value.time
           : time // ignore: cast_nullable_to_non_nullable
@@ -253,10 +278,6 @@ class __$AlarmCopyWithImpl<$Res> extends _$AlarmCopyWithImpl<$Res>
       name: name == freezed
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
-              as String,
-      phoneNumber: phoneNumber == freezed
-          ? _value.phoneNumber
-          : phoneNumber // ignore: cast_nullable_to_non_nullable
               as String,
       on: on == freezed
           ? _value.on
@@ -267,27 +288,33 @@ class __$AlarmCopyWithImpl<$Res> extends _$AlarmCopyWithImpl<$Res>
 }
 
 /// @nodoc
-
+@JsonSerializable()
 class _$_Alarm with DiagnosticableTreeMixin implements _Alarm {
   const _$_Alarm(
-      {this.time = "", this.name = "", this.phoneNumber = "", this.on = false});
+      {@JsonKey(name: "id") this.id = 0,
+      @JsonKey(name: "time") this.time = "",
+      @JsonKey(name: "name") this.name = "",
+      @JsonKey(name: "on") this.on = false});
 
-  @JsonKey(defaultValue: "")
+  factory _$_Alarm.fromJson(Map<String, dynamic> json) =>
+      _$_$_AlarmFromJson(json);
+
   @override
+  @JsonKey(name: "id")
+  final int id;
+  @override
+  @JsonKey(name: "time")
   final String time;
-  @JsonKey(defaultValue: "")
   @override
+  @JsonKey(name: "name")
   final String name;
-  @JsonKey(defaultValue: "")
   @override
-  final String phoneNumber;
-  @JsonKey(defaultValue: false)
-  @override
+  @JsonKey(name: "on")
   final bool on;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'Alarm(time: $time, name: $name, phoneNumber: $phoneNumber, on: $on)';
+    return 'Alarm(id: $id, time: $time, name: $name, on: $on)';
   }
 
   @override
@@ -295,9 +322,9 @@ class _$_Alarm with DiagnosticableTreeMixin implements _Alarm {
     super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', 'Alarm'))
+      ..add(DiagnosticsProperty('id', id))
       ..add(DiagnosticsProperty('time', time))
       ..add(DiagnosticsProperty('name', name))
-      ..add(DiagnosticsProperty('phoneNumber', phoneNumber))
       ..add(DiagnosticsProperty('on', on));
   }
 
@@ -305,13 +332,12 @@ class _$_Alarm with DiagnosticableTreeMixin implements _Alarm {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other is _Alarm &&
+            (identical(other.id, id) ||
+                const DeepCollectionEquality().equals(other.id, id)) &&
             (identical(other.time, time) ||
                 const DeepCollectionEquality().equals(other.time, time)) &&
             (identical(other.name, name) ||
                 const DeepCollectionEquality().equals(other.name, name)) &&
-            (identical(other.phoneNumber, phoneNumber) ||
-                const DeepCollectionEquality()
-                    .equals(other.phoneNumber, phoneNumber)) &&
             (identical(other.on, on) ||
                 const DeepCollectionEquality().equals(other.on, on)));
   }
@@ -319,28 +345,42 @@ class _$_Alarm with DiagnosticableTreeMixin implements _Alarm {
   @override
   int get hashCode =>
       runtimeType.hashCode ^
+      const DeepCollectionEquality().hash(id) ^
       const DeepCollectionEquality().hash(time) ^
       const DeepCollectionEquality().hash(name) ^
-      const DeepCollectionEquality().hash(phoneNumber) ^
       const DeepCollectionEquality().hash(on);
 
   @JsonKey(ignore: true)
   @override
   _$AlarmCopyWith<_Alarm> get copyWith =>
       __$AlarmCopyWithImpl<_Alarm>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$_$_AlarmToJson(this);
+  }
 }
 
 abstract class _Alarm implements Alarm {
   const factory _Alarm(
-      {String time, String name, String phoneNumber, bool on}) = _$_Alarm;
+      {@JsonKey(name: "id") int id,
+      @JsonKey(name: "time") String time,
+      @JsonKey(name: "name") String name,
+      @JsonKey(name: "on") bool on}) = _$_Alarm;
+
+  factory _Alarm.fromJson(Map<String, dynamic> json) = _$_Alarm.fromJson;
 
   @override
+  @JsonKey(name: "id")
+  int get id => throw _privateConstructorUsedError;
+  @override
+  @JsonKey(name: "time")
   String get time => throw _privateConstructorUsedError;
   @override
+  @JsonKey(name: "name")
   String get name => throw _privateConstructorUsedError;
   @override
-  String get phoneNumber => throw _privateConstructorUsedError;
-  @override
+  @JsonKey(name: "on")
   bool get on => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)

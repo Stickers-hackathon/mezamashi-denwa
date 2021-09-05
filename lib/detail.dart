@@ -3,6 +3,7 @@ import 'package:mezamashi_denwa/state/alarm_list.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter/cupertino.dart';
 import 'contacts.dart';
+import 'package:mezamashi_denwa/storage/alarm_list.dart';
 
 class Detail extends StatelessWidget {
   @override
@@ -24,7 +25,7 @@ class ChangeForm extends StatefulWidget {
 class _ChangeFormState extends State<ChangeForm> {
   String _name = "未選択";
   String _phoneNumber = "";
-  String _time = "00:00";
+  TimeOfDay _time = TimeOfDay.now();
   Map<String, bool> _check = {
     'sound': false,
     'vibration': false,
@@ -36,7 +37,7 @@ class _ChangeFormState extends State<ChangeForm> {
         padding: const EdgeInsets.all(10.0),
         child: Column(children: <Widget>[
           TextButton(
-            child: Text(_time),
+            child: Text("${_time.hour}:${_time.minute}"),
             style: TextButton.styleFrom(
               primary: Colors.black,
             ),
@@ -44,7 +45,7 @@ class _ChangeFormState extends State<ChangeForm> {
               final TimeOfDay timeOfDay = (await showTimePicker(
                   context: context, initialTime: TimeOfDay.now()))!;
               if (timeOfDay != null)
-                setState(() => {_time = timeOfDay.format(context)});
+                setState(() => {_time = timeOfDay});
             },
           ),
           Column(children: <Widget>[
@@ -98,8 +99,15 @@ class _ChangeFormState extends State<ChangeForm> {
               style: TextButton.styleFrom(
                 primary: Colors.black,
               ),
-              onPressed: () {
-                Navigator.pop(context, Alarm().copyWith(time: _time, name: _name, phoneNumber: _phoneNumber,on: false));
+              onPressed: () async {
+                final storage = new Storage();
+                final nextId = await storage.getNextAlarmId();
+                final newAlarm =
+                    Alarm().copyWith(id: nextId, time: _time.format(context), name: _name, phoneNumber: _phoneNumber, on: false);
+                final successful = await storage.addAlarm(newAlarm);
+                if (successful) {
+                  Navigator.pop(context, newAlarm);
+                }
               },
             ),
           ])

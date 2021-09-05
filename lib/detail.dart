@@ -22,7 +22,7 @@ class ChangeForm extends StatefulWidget {
 }
 
 class _ChangeFormState extends State<ChangeForm> {
-  String _name = "ランダム";
+  String _name = "未選択";
   String _phoneNumber = "";
   String _time = "00:00";
   Map<String, bool> _check = {
@@ -51,7 +51,7 @@ class _ChangeFormState extends State<ChangeForm> {
             _buildTile("アラーム音", "beep", "sound"),
             _buildTile("バイブ", "basic call", "vibration"),
             ListTile(
-                title: Text("誰に電話をかける？"),
+                title: const Text("誰に電話をかける？"),
                 subtitle: Text(_name),
                 onTap:  () async {
                   //権限の確認
@@ -69,12 +69,12 @@ class _ChangeFormState extends State<ChangeForm> {
                     showDialog(
                         context: context,
                         builder: (BuildContext context) => CupertinoAlertDialog(
-                          title: Text('Permissions error'),
-                          content: Text('Please enable contacts access '
+                          title: const Text('Permissions error'),
+                          content: const Text('Please enable contacts access '
                               'permission in system settings'),
                           actions: <Widget>[
                             CupertinoDialogAction(
-                              child: Text('OK'),
+                              child: const Text('OK'),
                               onPressed: () => Navigator.of(context).pop(),
                             )
                           ],
@@ -126,7 +126,6 @@ class _ChangeFormState extends State<ChangeForm> {
 //Check contacts permission
 Future<PermissionStatus> _getPermission() async {
   final PermissionStatus permission = await Permission.contacts.status;
-  print(permission);
   if (permission != PermissionStatus.granted) {
     final Map<Permission, PermissionStatus> permissionStatus =
     await [Permission.contacts].request();

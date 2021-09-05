@@ -52,7 +52,9 @@ class _ContactsPageState extends State<ContactsPage> {
               child: ListTile(
                 title: const Text('ランダム'),
                 onTap:  () {
-                  Navigator.pop(context, ['ランダム', _contacts!.elementAt(rand.nextInt(_contacts!.length)).phones?.elementAt(0).value]);
+                  var phoneNumber = _contacts!.elementAt(rand.nextInt(_contacts!.length)).phones?.elementAt(0).value ?? '';
+                  phoneNumber = phoneNumber.replaceAll(RegExp(r'\D'), '');
+                  Navigator.pop(context, ['ランダム', phoneNumber]);
                 },
               ),
             );
@@ -70,7 +72,9 @@ class _ContactsPageState extends State<ContactsPage> {
                 title: Text(contact.displayName ?? ''),
                 subtitle: Text(contact.phones?.elementAt(0).value ?? ''),
                 onTap:  () {
-                  Navigator.pop(context, [contact?.displayName, contact?.phones?.elementAt(0).value]);
+                  var phoneNumber = contact?.phones?.elementAt(0).value ?? '';
+                  phoneNumber = phoneNumber.replaceAll(RegExp(r'\D'), '');
+                  Navigator.pop(context, [contact?.displayName ?? '', phoneNumber]);
                 },
               ),
             );

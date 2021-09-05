@@ -132,7 +132,7 @@ class _ChangeFormState extends StatelessWidget {
         onChanged: (bool value) async {
           final storage = Storage();
           final successful = await storage.updateAlarm(Alarm().copyWith(
-              id: alarm.id, name: alarm.name, time: alarm.time, on: !alarm.on));
+              id: alarm.id, name: alarm.name, time: alarm.time, on: value));
           if (successful)
             context.read<AlarmListStateNotifier>().updateAlarmActivate(i);
           alarm.on ? _cancelNotification() : _zonedScheduleNotification(alarm.time, i);

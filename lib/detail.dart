@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mezamashi_denwa/state/alarm_list.dart';
+import 'package:mezamashi_denwa/storage/alarm_list.dart';
 
 class Detail extends StatelessWidget {
   @override
@@ -62,8 +63,15 @@ class _ChangeFormState extends State<ChangeForm> {
               style: TextButton.styleFrom(
                 primary: Colors.black,
               ),
-              onPressed: () {
-                Navigator.pop(context, Alarm().copyWith(time: _time, name: "コーリングマン", on: false));
+              onPressed: () async {
+                final storage = new Storage();
+                final nextId = await storage.getNextAlarmId();
+                final newAlarm =
+                    Alarm().copyWith(id: nextId, time: _time, name: "コーリングマン", on: false);
+                final successful = await storage.addAlarm(newAlarm);
+                if (successful) {
+                  Navigator.pop(context, newAlarm);
+                }
               },
             ),
           ])

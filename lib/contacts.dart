@@ -52,13 +52,13 @@ class _ContactsPageState extends State<ContactsPage> {
               child: ListTile(
                 title: const Text('ランダム'),
                 onTap:  () {
-                  Navigator.pop(context, ['ランダム', _contacts?.elementAt(rand.nextInt(_contacts!.length)).phones?.elementAt(0).value]);
+                  Navigator.pop(context, ['ランダム', _contacts!.elementAt(rand.nextInt(_contacts!.length)).phones?.elementAt(0).value]);
                 },
               ),
             );
           }else {
             //２行目以降は連絡先
-            contact = _contacts?.elementAt(index-1);
+            contact = _contacts!.elementAt(index-1);
             return Container(
               margin: EdgeInsets.all(1.0),
               padding: EdgeInsets.all(1.0),
@@ -67,8 +67,8 @@ class _ContactsPageState extends State<ContactsPage> {
                   color: Colors.white
               ),
               child: ListTile(
-                title: Text(contact?.displayName ?? ''),
-                subtitle: Text(contact?.phones?.elementAt(0).value ?? ''),
+                title: Text(contact.displayName ?? ''),
+                subtitle: Text(contact.phones?.elementAt(0).value ?? ''),
                 onTap:  () {
                   Navigator.pop(context, [contact?.displayName, contact?.phones?.elementAt(0).value]);
                 },

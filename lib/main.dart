@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_state_notifier/flutter_state_notifier.dart';
 import 'package:mezamashi_denwa/call.dart';
 import 'package:mezamashi_denwa/state/alarm_list.dart';
+import 'package:mezamashi_denwa/storage/alarm_list.dart';
 import 'package:provider/provider.dart';
 import 'detail.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -60,6 +61,15 @@ class MyApp extends StatelessWidget {
 class _ChangeFormState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    var initialState = context.read<AlarmListStateNotifier>().state.alarmList;
+    if (initialState.isEmpty) {
+      () async {
+        final storage = new Storage();
+        initialState = await storage.getAlarmList();
+        context.read<AlarmListStateNotifier>().setAlarmList(initialState);
+      }();
+    }
+
     return Scaffold(
         appBar: AppBar(title: Text('Startup Name Generator'), actions: <Widget>[
           IconButton(
@@ -112,14 +122,20 @@ class _ChangeFormState extends StatelessWidget {
               color: Colors.grey[500],
               size: 45.0,
             ),
-            onPressed: () =>
-                context.read<AlarmListStateNotifier>().removeAlarmListItem(i)),
+            onPressed: () async {
+              final storage = Storage();
+              storage.deleteAlarm(alarm.id);
+              context.read<AlarmListStateNotifier>().removeAlarmListItem(i);
+            }),
         title: Text("${alarm.time.hour}:${alarm.time.minute}"),
         subtitle: Text(alarm.name),
-        onChanged: (bool value) {
+        onChanged: (bool value) async {
+          final storage = Storage();
+          final successful = await storage.updateAlarm(Alarm().copyWith(
+              id: alarm.id, name: alarm.name, time: alarm.time, on: !alarm.on));
+          if (successful)
+            context.read<AlarmListStateNotifier>().updateAlarmActivate(i);
           alarm.on ? _cancelNotification() : _zonedScheduleNotification(alarm.time, i);
-          context.read<AlarmListStateNotifier>().updateAlarmActivate(i);
-          print("value: $value");
         });
   }
 }

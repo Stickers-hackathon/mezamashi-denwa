@@ -133,7 +133,7 @@ class _ChangeFormState extends StatelessWidget {
           final storage = Storage();
           final successful = await storage.updateAlarm(Alarm().copyWith(
               id: alarm.id, name: alarm.name, time: alarm.time, on: value));
-          var _hour = alarm.time.indexOf(':') == 1 ? int.parse(alarm.time.substring(0,1)) : int.parse(alarm.time.substring(0,2));
+          var _hour = alarm.time.indexOf(':') == 1 ? alarm.time.substring(5,7) == "PM" ? int.parse(alarm.time.substring(0,1)) + 12 : int.parse(alarm.time.substring(0,1)) : alarm.time.substring(6,8) == "PM" ? int.parse(alarm.time.substring(0,2)) + 12 : int.parse(alarm.time.substring(0,2));
           var _minute = alarm.time.indexOf(':') == 1 ? int.parse(alarm.time.substring(2,4)) : int.parse(alarm.time.substring(3,5));
           if (successful)
             context.read<AlarmListStateNotifier>().updateAlarmActivate(i);

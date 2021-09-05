@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:contacts_service/contacts_service.dart';
+import 'dart:math' as math;
 
 
 class ContactsPage extends StatefulWidget {
@@ -9,6 +10,8 @@ class ContactsPage extends StatefulWidget {
 
 class _ContactsPageState extends State<ContactsPage> {
   Iterable<Contact>? _contacts;
+  var rand = new math.Random();
+  
 
   @override
   void initState() {
@@ -17,11 +20,12 @@ class _ContactsPageState extends State<ContactsPage> {
   }
 
   Future<void> getContacts() async {
-    //Make sure we already have permissions for contacts when we get to this
-    //page, so we can just retrieve it
+    //連絡先を取得
     final Iterable<Contact> contacts = await ContactsService.getContacts();
+    //電話番号がある連絡先だけにする
+    final Iterable<Contact> validContacts = contacts.where((e) => e.phones!.isNotEmpty);
     setState(() {
-      _contacts = contacts;
+      _contacts = validContacts;
     });
   }
 
@@ -29,13 +33,15 @@ class _ContactsPageState extends State<ContactsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: (Text('電話をかける人')),
+        title: (const Text('電話をかける人')),
       ),
       body: _contacts != null ? ListView.builder(
+        //ランダム用にループ回数を+1
         itemCount: _contacts != null ? _contacts!.length + 1 : 0,
         itemBuilder: (BuildContext context, int index) {
           Contact? contact;
           if (index == 0) {
+            //1行目はランダム行
             return Container(
               margin: EdgeInsets.all(1.0),
               padding: EdgeInsets.all(1.0),
@@ -44,13 +50,14 @@ class _ContactsPageState extends State<ContactsPage> {
                   color: Colors.white
               ),
               child: ListTile(
-                title: Text("ランダム"),
+                title: const Text('ランダム'),
                 onTap:  () {
-                  Navigator.pop(context, ["ランダム", _contacts?.elementAt(0).phones?.elementAt(0).value]);
+                  Navigator.pop(context, ['ランダム', _contacts?.elementAt(rand.nextInt(_contacts!.length)).phones?.elementAt(0).value]);
                 },
               ),
             );
           }else {
+            //２行目以降は連絡先
             contact = _contacts?.elementAt(index-1);
             return Container(
               margin: EdgeInsets.all(1.0),

@@ -134,8 +134,6 @@ class _ChangeFormState extends StatelessWidget {
           final storage = Storage();
           final successful = await storage.updateAlarm(Alarm().copyWith(
               id: alarm.id, name: alarm.name, time: alarm.time, on: value));
-          var _hour = alarm.time.indexOf(':') == 1 ? alarm.time.substring(5,7) == "PM" ? int.parse(alarm.time.substring(0,1)) + 12 : int.parse(alarm.time.substring(0,1)) : alarm.time.substring(6,8) == "PM" ? int.parse(alarm.time.substring(0,2)) + 12 : int.parse(alarm.time.substring(0,2));
-          var _minute = alarm.time.indexOf(':') == 1 ? int.parse(alarm.time.substring(2,4)) : int.parse(alarm.time.substring(3,5));
           var t = alarm.time;
           final format = t[t.length-1] == 'M' ? DateFormat.jm() : DateFormat.Hm();
           TimeOfDay schedule = TimeOfDay.fromDateTime(format.parse(alarm.time));

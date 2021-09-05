@@ -127,15 +127,17 @@ class _ChangeFormState extends StatelessWidget {
               storage.deleteAlarm(alarm.id);
               context.read<AlarmListStateNotifier>().removeAlarmListItem(i);
             }),
-        title: Text("${alarm.time.hour}:${alarm.time.minute}"),
+        title: Text("${alarm.time}"),
         subtitle: Text(alarm.name),
         onChanged: (bool value) async {
           final storage = Storage();
           final successful = await storage.updateAlarm(Alarm().copyWith(
               id: alarm.id, name: alarm.name, time: alarm.time, on: value));
+          var _hour = alarm.name.indexOf(':') == 1 ? int.parse(alarm.time.substring(0,1)) : int.parse(alarm.time.substring(0,2));
+          var _minute = alarm.name.indexOf(':') == 1 ? int.parse(alarm.time.substring(2,4)) : int.parse(alarm.time.substring(3,5));
           if (successful)
             context.read<AlarmListStateNotifier>().updateAlarmActivate(i);
-          alarm.on ? _cancelNotification() : _zonedScheduleNotification(alarm.time, i);
+          alarm.on ? _cancelNotification() : _zonedScheduleNotification(TimeOfDay(hour: _hour, minute: _minute), i);
         });
   }
 }

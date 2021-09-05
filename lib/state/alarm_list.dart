@@ -16,7 +16,7 @@ class Alarm with _$Alarm {
   const factory Alarm(
       {
         @JsonKey(name: "id") @Default(0) int id,
-        @JsonKey(name: "time") @Default(TimeOfDay(hour: 0, minute: 0)) TimeOfDay time,
+        @JsonKey(name: "time") @Default("") String time,
       @JsonKey(name: "name") @Default("") String name,
       @JsonKey(name: "on") @Default(false) bool on}) = _Alarm;
 

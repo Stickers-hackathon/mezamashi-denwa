@@ -67,7 +67,7 @@ class _ChangeFormState extends State<ChangeForm> {
                 final storage = new Storage();
                 final nextId = await storage.getNextAlarmId();
                 final newAlarm =
-                    Alarm().copyWith(id: nextId, time: _time, name: "コーリングマン", on: false);
+                    Alarm().copyWith(id: nextId, time: _time.format(context), name: "コーリングマン", on: false);
                 final successful = await storage.addAlarm(newAlarm);
                 if (successful) {
                   Navigator.pop(context, newAlarm);

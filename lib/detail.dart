@@ -20,7 +20,7 @@ class ChangeForm extends StatefulWidget {
 }
 
 class _ChangeFormState extends State<ChangeForm> {
-  String _time = "00:00";
+  TimeOfDay _time = TimeOfDay.now();
   Map<String, bool> _check = {
     'sound': false,
     'vibration': false,
@@ -32,7 +32,7 @@ class _ChangeFormState extends State<ChangeForm> {
         padding: const EdgeInsets.all(10.0),
         child: Column(children: <Widget>[
           TextButton(
-            child: Text(_time),
+            child: Text("${_time.hour}:${_time.minute}"),
             style: TextButton.styleFrom(
               primary: Colors.black,
             ),
@@ -40,7 +40,7 @@ class _ChangeFormState extends State<ChangeForm> {
               final TimeOfDay timeOfDay = (await showTimePicker(
                   context: context, initialTime: TimeOfDay.now()))!;
               if (timeOfDay != null)
-                setState(() => {_time = timeOfDay.format(context)});
+                setState(() => {_time = timeOfDay});
             },
           ),
           Column(children: <Widget>[
@@ -67,7 +67,7 @@ class _ChangeFormState extends State<ChangeForm> {
                 final storage = new Storage();
                 final nextId = await storage.getNextAlarmId();
                 final newAlarm =
-                    Alarm().copyWith(id: nextId, time: _time, name: "コーリングマン", on: false);
+                    Alarm().copyWith(id: nextId, time: _time.format(context), name: "コーリングマン", on: false);
                 final successful = await storage.addAlarm(newAlarm);
                 if (successful) {
                   Navigator.pop(context, newAlarm);

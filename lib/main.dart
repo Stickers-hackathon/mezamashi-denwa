@@ -5,8 +5,47 @@ import 'package:mezamashi_denwa/state/alarm_list.dart';
 import 'package:mezamashi_denwa/storage/alarm_list.dart';
 import 'package:provider/provider.dart';
 import 'detail.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_native_timezone/flutter_native_timezone.dart';
+import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
+import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
+import 'package:intl/intl.dart';
 
-void main() => runApp(MyApp());
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+// initialise the plugin. app_icon needs to be a added as a drawable resource to the Android head project
+
+String? selectedNotificationPayload;
+
+Future<void> main() async {
+  // needed if you intend to initialize in the `main` function
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await _configureLocalTimeZone();
+
+  const AndroidInitializationSettings initializationSettingsAndroid = AndroidInitializationSettings('app_icon');
+  final IOSInitializationSettings initializationSettingsIOS = IOSInitializationSettings();
+  final InitializationSettings initializationSettings = InitializationSettings(
+    android: initializationSettingsAndroid,
+    iOS: initializationSettingsIOS,);
+  await flutterLocalNotificationsPlugin.initialize(initializationSettings,
+      onSelectNotification: (String? payload) async {
+        if (payload != null) {
+          debugPrint('notification payload: $payload');
+        }
+        selectedNotificationPayload = payload;
+      });
+
+  await AndroidAlarmManager.initialize();
+
+  runApp(MyApp());
+}
+
+Future<void> _configureLocalTimeZone() async {
+  tz.initializeTimeZones();
+  final String? timeZoneName = await FlutterNativeTimezone.getLocalTimezone();
+  tz.setLocalLocation(tz.getLocation(timeZoneName!));
+}
 
 class MyApp extends StatelessWidget {
   @override
@@ -89,14 +128,52 @@ class _ChangeFormState extends StatelessWidget {
               storage.deleteAlarm(alarm.id);
               context.read<AlarmListStateNotifier>().removeAlarmListItem(i);
             }),
-        title: Text(alarm.time),
+        title: Text("${alarm.time}"),
         subtitle: Text(alarm.name),
         onChanged: (bool value) async {
           final storage = Storage();
           final successful = await storage.updateAlarm(Alarm().copyWith(
               id: alarm.id, name: alarm.name, time: alarm.time, on: value));
+          var t = alarm.time;
+          final format = t[t.length-1] == 'M' ? DateFormat.jm() : DateFormat.Hm();
+          TimeOfDay schedule = TimeOfDay.fromDateTime(format.parse(alarm.time));
           if (successful)
             context.read<AlarmListStateNotifier>().updateAlarmActivate(i);
+          alarm.on ? _cancelNotification() : _zonedScheduleNotification(schedule, i);
         });
   }
+}
+
+Future<void> _zonedScheduleNotification(TimeOfDay t, int i) async {
+  tz.TZDateTime _nextInstanceOfTime() {
+    final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
+    tz.TZDateTime scheduledDate = tz.TZDateTime(tz.local, now.year, now.month, now.day, t.hour, t.minute);
+    if (scheduledDate.isBefore(now)) {
+      scheduledDate = scheduledDate.add(const Duration(days: 1));
+    }
+    return scheduledDate;
+  }
+
+  await flutterLocalNotificationsPlugin.zonedSchedule(
+      i,
+      'scheduled title',
+      'scheduled body',
+      _nextInstanceOfTime(),
+      const NotificationDetails(
+          android: AndroidNotificationDetails('your channel id',
+              'your channel name', 'your channel description')),
+      androidAllowWhileIdle: true,
+      uiLocalNotificationDateInterpretation:
+      UILocalNotificationDateInterpretation.absoluteTime);
+
+  await AndroidAlarmManager.periodic(const Duration(seconds: 15), 0, printHello);
+}
+
+Future<void> _cancelNotification() async {
+  await flutterLocalNotificationsPlugin.cancel(0);
+}
+
+Future<void> printHello() async {
+  final DateTime now = DateTime.now();
+  print("[$now] Hello, world! function='$printHello'");
 }

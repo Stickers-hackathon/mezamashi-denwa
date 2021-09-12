@@ -10,6 +10,7 @@ import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
+import 'package:intl/intl.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 // initialise the plugin. app_icon needs to be a added as a drawable resource to the Android head project
@@ -133,11 +134,12 @@ class _ChangeFormState extends StatelessWidget {
           final storage = Storage();
           final successful = await storage.updateAlarm(Alarm().copyWith(
               id: alarm.id, name: alarm.name, time: alarm.time, on: value));
-          var _hour = alarm.time.indexOf(':') == 1 ? alarm.time.substring(5,7) == "PM" ? int.parse(alarm.time.substring(0,1)) + 12 : int.parse(alarm.time.substring(0,1)) : alarm.time.substring(6,8) == "PM" ? int.parse(alarm.time.substring(0,2)) + 12 : int.parse(alarm.time.substring(0,2));
-          var _minute = alarm.time.indexOf(':') == 1 ? int.parse(alarm.time.substring(2,4)) : int.parse(alarm.time.substring(3,5));
+          var t = alarm.time;
+          final format = t[t.length-1] == 'M' ? DateFormat.jm() : DateFormat.Hm();
+          TimeOfDay schedule = TimeOfDay.fromDateTime(format.parse(alarm.time));
           if (successful)
             context.read<AlarmListStateNotifier>().updateAlarmActivate(i);
-          alarm.on ? _cancelNotification() : _zonedScheduleNotification(TimeOfDay(hour: _hour, minute: _minute), i);
+          alarm.on ? _cancelNotification() : _zonedScheduleNotification(schedule, i);
         });
   }
 }

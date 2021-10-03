@@ -11,6 +11,7 @@ _$_Alarm _$_$_AlarmFromJson(Map<String, dynamic> json) {
     id: json['id'] as int,
     time: json['time'] as String,
     name: json['name'] as String,
+    phoneNumber: json['phoneNumber'] as String,
     on: json['on'] as bool,
   );
 }
@@ -19,5 +20,6 @@ Map<String, dynamic> _$_$_AlarmToJson(_$_Alarm instance) => <String, dynamic>{
       'id': instance.id,
       'time': instance.time,
       'name': instance.name,
+      'phoneNumber': instance.phoneNumber,
       'on': instance.on,
     };

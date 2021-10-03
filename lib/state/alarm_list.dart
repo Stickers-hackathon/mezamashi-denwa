@@ -18,6 +18,7 @@ class Alarm with _$Alarm {
         @JsonKey(name: "id") @Default(0) int id,
         @JsonKey(name: "time") @Default("") String time,
       @JsonKey(name: "name") @Default("") String name,
+        @JsonKey(name: "phoneNumber") @Default("") String phoneNumber,
       @JsonKey(name: "on") @Default(false) bool on}) = _Alarm;
 
   factory Alarm.fromJson(Map<String, dynamic> json) => _$AlarmFromJson(json);

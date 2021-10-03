@@ -61,6 +61,9 @@
        # プラグインがスケジュールされた通知の表示を処理するために必要
        <receiver android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationReceiver" />
     </application>
+    <uses-permission android:name="android.permission.READ_CONTACTS"/>
+    <uses-permission android:name="android.permission.WRITE_CONTACTS"/>
+    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
     <queries>
         <intent>
             <action android:name="android.intent.action.DIAL" />
